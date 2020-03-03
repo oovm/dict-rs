@@ -1,10 +1,3 @@
-# StringMap
-
-Create a record to store any type of value
-
-## Basic Usage
-
-```rust
 extern crate string_map;
 
 use string_map::StringMap;
@@ -20,4 +13,3 @@ fn main() {
     assert_eq!(dict.get_mut("string"), Some(&mut "str"));
     assert_eq!(dict.remove("boolean"), Some(true));
 }
-```
