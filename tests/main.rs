@@ -9,7 +9,8 @@ fn main() {
     dict.insert("string", "str");
     dict.insert("boolean", true);
 
-    assert_eq!(dict.get("number"), Some(&0));
-    assert_eq!(dict.get_mut("string"), Some(&mut "str"));
-    assert_eq!(dict.remove("boolean"), Some(true));
+    debug_assert_eq!(dict.get("number"), Some(&0));
+    debug_assert_eq!(dict.get_mut("string"), Some(&mut "str"));
+    debug_assert_eq!(dict.get_key_value("boolean"), Some(("boolean", &true)));
+    debug_assert_eq!(dict.remove::<bool>("nothing"), None);
 }
