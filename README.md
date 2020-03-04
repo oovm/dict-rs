@@ -19,6 +19,5 @@ fn main() {
     debug_assert_eq!(dict.get("number"), Some(&0));
     debug_assert_eq!(dict.get_mut("string"), Some(&mut "str"));
     debug_assert_eq!(dict.get_key_value("boolean"), Some(("boolean", &true)));
-    debug_assert_eq!(dict.remove::<bool>("nothing"), None);
 }
 ```
