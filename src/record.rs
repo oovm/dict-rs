@@ -1,29 +1,41 @@
 use crate::utils::force_downcast;
 use std::{
-    any::Any,
+    any::{type_name, Any},
     collections::{
         hash_map::{Entry, Iter, Keys, Values, ValuesMut},
         HashMap,
     },
 };
 
-pub struct StringMap(pub(crate) HashMap<Box<str>, Box<dyn Any + Send + Sync>>);
+pub struct StringMap(pub(crate) HashMap<Box<str>, (Box<dyn Any + Send + Sync>, Box<str>)>);
 
 impl StringMap {
     pub fn insert<T: Any + Send + Sync>(&mut self, key: &str, x: T) -> Option<T> {
-        self.0.insert(Box::from(key), Box::new(x)).map(force_downcast)
+        match self.0.insert(Box::from(key), (Box::new(x), Box::from(type_name::<T>()))) {
+            Some((v, _)) => Some(force_downcast(v)),
+            None => None,
+        }
     }
 
     pub fn remove<T: Any + Send + Sync>(&mut self, key: &str) -> Option<T> {
-        self.0.remove(key).map(force_downcast)
+        match self.0.remove(key) {
+            Some((v, _)) => Some(force_downcast(v)),
+            None => None,
+        }
     }
 
     pub fn get<T: Any + Send + Sync>(&self, key: &str) -> Option<&T> {
-        self.0.get(key).map(|b| b.downcast_ref::<T>().unwrap())
+        match self.0.get(key) {
+            Some((v, _)) => Some(v.downcast_ref::<T>().unwrap()),
+            None => None,
+        }
     }
 
     pub fn get_mut<T: Any + Send + Sync>(&mut self, key: &str) -> Option<&mut T> {
-        self.0.get_mut(key).map(|b| b.downcast_mut::<T>().unwrap())
+        match self.0.get_mut(key) {
+            Some((v, _)) => Some(v.downcast_mut::<T>().unwrap()),
+            None => None,
+        }
     }
 
     pub fn get_key_value<'s, T: Any + Send + Sync>(&self, key: &'s str) -> Option<(&'s str, &T)> {
@@ -49,14 +61,17 @@ impl StringMap {
         self.0.is_empty()
     }
     pub fn keys(&self) -> Keys<Box<str>, Box<dyn Any + Send + Sync>> {
-        self.0.keys()
+        self.0.keys();
+        unimplemented!()
     }
     pub fn values(&self) -> Values<Box<str>, Box<dyn Any + Send + Sync>> {
-        self.0.values()
+        self.0.values();
+        unimplemented!()
     }
 
     pub fn iter(&self) -> Iter<Box<str>, Box<dyn Any + Send + Sync>> {
-        self.0.iter()
+        self.0.iter();
+        unimplemented!()
     }
 
     pub fn contains_key(&self, key: &str) -> bool {
@@ -67,10 +82,12 @@ impl StringMap {
         self.0.clear()
     }
     pub fn values_mut(&mut self) -> ValuesMut<Box<str>, Box<dyn Any + Send + Sync>> {
-        self.0.values_mut()
+        self.0.values_mut();
+        unimplemented!()
     }
 
     pub fn entry(&mut self, key: &str) -> Entry<Box<str>, Box<dyn Any + Send + Sync>> {
-        self.0.entry(Box::from(key))
+        self.0.entry(Box::from(key));
+        unimplemented!()
     }
 }

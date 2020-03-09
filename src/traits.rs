@@ -1,7 +1,6 @@
 use crate::StringMap;
 use std::{
-    any::Any,
-    ops::{Index, IndexMut},
+    fmt::{self, Debug},
 };
 
 impl Default for StringMap {
@@ -10,13 +9,20 @@ impl Default for StringMap {
     }
 }
 
-impl Index<&str> for StringMap {
-    type Output = Box<dyn Any + Send + Sync>;
-
-    fn index(&self, key: &str) -> &Self::Output {
-        self.0.index(key)
+impl Debug for StringMap {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_map().entries(self.0.iter().map(|(k, v)| (k, &v.1))).finish()
     }
 }
+/*
+impl<T> Index<&str,T> for StringMap {
+    type Output = T;
+
+    fn index(&self, key: &str) -> &Self::Output {
+        self.get::<T>(key).unwrap()
+    }
+}
+*/
 /*
 impl IndexMut<&str> for StringMap {
     fn index_mut(&mut self, key: &str) -> &mut Self::Output {

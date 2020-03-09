@@ -21,6 +21,7 @@ fn index() {
     dict.insert("number", 0);
     dict.insert("string", "str");
     dict.insert("boolean", true);
+    println!("{:#?}", dict)
 
     //debug_assert_eq!(dict["number"], 0);
 }
