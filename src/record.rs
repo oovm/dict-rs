@@ -25,17 +25,21 @@ impl StringMap {
     }
 
     pub fn get<T: Any + Send + Sync>(&self, key: &str) -> Option<&T> {
-        match self.0.get(key) {
-            Some((v, _)) => Some(v.downcast_ref::<T>().unwrap()),
-            None => None,
+        if let Some((v, _)) = self.0.get(key) {
+            if let Some(s) = v.downcast_ref::<T>() {
+                return Some(s);
+            }
         }
+        return None;
     }
 
     pub fn get_mut<T: Any + Send + Sync>(&mut self, key: &str) -> Option<&mut T> {
-        match self.0.get_mut(key) {
-            Some((v, _)) => Some(v.downcast_mut::<T>().unwrap()),
-            None => None,
+        if let Some((v, _)) = self.0.get_mut(key) {
+            if let Some(s) = v.downcast_mut::<T>() {
+                return Some(s);
+            }
         }
+        return None;
     }
 
     pub fn get_key_value<'s, T: Any + Send + Sync>(&self, key: &'s str) -> Option<(&'s str, &T)> {

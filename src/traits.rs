@@ -1,7 +1,5 @@
 use crate::StringMap;
-use std::{
-    fmt::{self, Debug},
-};
+use std::fmt::{self, Debug};
 
 impl Default for StringMap {
     fn default() -> Self {
